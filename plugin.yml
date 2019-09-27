@@ -35,7 +35,7 @@ permissions:
             default: true
             description: "Allows making 1 chest shop"
           chestshop.makeshop.unlimited:
-            default: op
+            default: true
             description: "Allows making unlimited chest shops"
       chestshop.deleteshop:
         default: op
