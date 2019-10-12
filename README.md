@@ -1,4 +1,6 @@
 # SignShopXSOAP
+
+[![HitCount](http://hits.dwyl.io/xSoapers/ChestShopColor.svg)](http://hits.dwyl.io/xSoapers/ChestShopColor)
 ```•Hi xsoap here```
 
 **in this latter i will show you a plugin Economy They Called SignShop i think its very important in Economy Server** `Minecraft Pe`
