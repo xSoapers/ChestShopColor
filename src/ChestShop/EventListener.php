@@ -38,18 +38,18 @@ class EventListener implements Listener
 						"signZ" => $block->getZ()
 					])) === false) return;
 				if ($shopInfo['shopOwner'] === $player->getName()) {
-					$player->sendMessage("§cTidak Bisa Membeli Barang Anda Sendiri!");
+					$player->sendMessage("§cCannot Buy Your Own Shop!");
 					return;
 				}else{
 					$event->setCancelled();
 				}
 				$buyerMoney = EconomyAPI::getInstance()->myMoney($player->getName());
 				if ($buyerMoney === false) {
-					$player->sendMessage("§eData Anda Di Servee Ini Tidak Ada!");
+					$player->sendMessage("§eYour Data On This Server Does Not Exist!");
 					return;
 				}
 				if ($buyerMoney < $shopInfo['price']) {
-					$player->sendMessage("§cUang Anda Tidak Cukup!");
+					$player->sendMessage("§cYour money is not enough!");
 					return;
 				}
 				/** @var Chest $chest */
@@ -63,9 +63,9 @@ class EventListener implements Listener
 					if ($item->getID() === $pID and $item->getDamage() === $pMeta) $itemNum += $item->getCount();
 				}
 				if ($itemNum < $shopInfo['saleNum']) {
-					$player->sendMessage("§aChest Ini Sudah Habis!");
+					$player->sendMessage("§aThis Chest is out, please contact the shop owner!");
 					if (($p = $this->plugin->getServer()->getPlayer($shopInfo['shopOwner'])) !== null) {
-						$p->sendMessage("§aChestShop Anda Telah Habis Segera Isiulang: ".ItemFactory::get($pID, $pMeta)->getName());
+						$p->sendMessage("§aYour ChestShop has finished refilling immediately: ".ItemFactory::get($pID, $pMeta)->getName());
 					}
 					return;
 				}
@@ -75,16 +75,16 @@ class EventListener implements Listener
 				$player->getInventory()->addItem($item);
 				$sellerMoney = EconomyAPI::getInstance()->myMoney($shopInfo['shopOwner']);
 				if(EconomyAPI::getInstance()->reduceMoney($player->getName(), $shopInfo['price'], false, "ChestShop") === EconomyAPI::RET_SUCCESS and EconomyAPI::getInstance()->addMoney($shopInfo['shopOwner'], $shopInfo['price'], false, "ChestShop") === EconomyAPI::RET_SUCCESS) {
-					$player->sendMessage("§bTerima Kasih Telah Membeli {player}");
+					$player->sendMessage("§bThank you for buying.");
 					if (($p = $this->plugin->getServer()->getPlayer($shopInfo['shopOwner'])) !== null) {
-						$p->sendMessage("{$player->getName()} Terbeli ".ItemFactory::get($pID, $pMeta)->getName()." for ".EconomyAPI::getInstance()->getMonetaryUnit().$shopInfo['price']);
+						$p->sendMessage("{$player->getName()} You Bought ".ItemFactory::get($pID, $pMeta)->getName()." for ".EconomyAPI::getInstance()->getMonetaryUnit().$shopInfo['price']);
 					}
 				}else{
 					$player->getInventory()->removeItem($item);
 					$chest->getInventory()->addItem($item);
 					EconomyAPI::getInstance()->setMoney($player->getName(), $buyerMoney);
 					EconomyAPI::getInstance()->setMoney($shopInfo['shopOwner'], $sellerMoney);
-					$player->sendMessage("§cPembelian Gagal!");
+					$player->sendMessage("§cPurchase Failed!");
 				}
 				break;
 
@@ -95,7 +95,7 @@ class EventListener implements Listener
 					"chestZ" => $block->getZ()
 				]);
 				if ($shopInfo !== false and $shopInfo['shopOwner'] !== $player->getName()) {
-					$player->sendMessage("Chest Ini Di Protect!");
+					$player->sendMessage("This chest is protected!");
 					$event->setCancelled();
 				}
 				break;
@@ -121,11 +121,11 @@ class EventListener implements Listener
 				$shopInfo = $this->databaseManager->selectByCondition($condition);
 				if ($shopInfo !== false) {
 					if ($shopInfo['shopOwner'] !== $player->getName() and !$player->hasPermission("chestshop.deleteshop")) {
-						$player->sendMessage("§cSign Ini Telah Di protected!");
+						$player->sendMessage("§cThis Sign Has Been Protectedd!");
 						$event->setCancelled();
 					} else {
 						$this->databaseManager->deleteByCondition($condition);
-						$player->sendMessage("§aMenutup ChestShop Anda");
+						$player->sendMessage("§cClose your chestshop");
 					}
 				}
 				break;
@@ -139,11 +139,11 @@ class EventListener implements Listener
 				$shopInfo = $this->databaseManager->selectByCondition($condition);
 				if ($shopInfo !== false) {
 					if ($shopInfo['shopOwner'] !== $player->getName() and !$player->hasPermission("chestshop.deleteshop")) {
-						$player->sendMessage("¶aChest Ini Sudah Di protected!");
+						$player->sendMessage("§cThis Sign Has Been Protectedd!");
 						$event->setCancelled();
 					} else {
 						$this->databaseManager->deleteByCondition($condition);
-						$player->sendMessage("§aMenutup ChestShop Anda");
+						$player->sendMessage("§cClose your chestshop");
 					}
 				}
 				break;
