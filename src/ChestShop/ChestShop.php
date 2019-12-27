@@ -26,7 +26,7 @@ class ChestShop extends PluginBase
 					return false;
 				$constants = array_keys((new \ReflectionClass(ItemIds::class))->getConstants());
 				foreach ($constants as $constant) {
-					if (stripos($constant, $name) !== false) {
+			                if (stripos($constant, (string)$name) !== false) {
 						$id = constant(ItemIds::class."::$constant");
 						$constant = str_replace("_", " ", $constant);
 						$sender->sendMessage("ID:$id $constant");
